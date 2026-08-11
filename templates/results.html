@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Modern AI Resume Screening Dashboard</title>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" rel="stylesheet">
+<style>
+body{background:#eef3f8;font-family:'Segoe UI',sans-serif}
+.navbar{background:linear-gradient(90deg,#0d6efd,#6f42c1)}
+.stat-card{border:none;border-radius:18px;color:#fff}
+.shadow-card{border:none;border-radius:18px;box-shadow:0 8px 20px rgba(0,0,0,.08);transition:.25s}
+.shadow-card:hover{transform:translateY(-4px)}
+.badge{margin:2px}
+.progress{height:18px}
+</style>
+</head>
+<body>
+<nav class="navbar navbar-dark">
+<div class="container-fluid">
+<span class="navbar-brand"><i class="fa-solid fa-robot"></i> AI Resume Screening Dashboard</span>
+<a href="/download" class="btn btn-light"><i class="fa fa-download"></i> Download CSV</a>
+</div>
+</nav>
+
+<div class="container py-4">
+
+<div class="row g-3 mb-4">
+<div class="col-md-3"><div class="card stat-card bg-primary text-center p-3"><h2>{{ total_resumes }}</h2><small>Total Resumes</small></div></div>
+<div class="col-md-3"><div class="card stat-card bg-success text-center p-3"><h2>{{ highest_score }}%</h2><small>Highest ATS</small></div></div>
+<div class="col-md-3"><div class="card stat-card bg-warning text-center p-3"><h2>{{ average_score }}%</h2><small>Average ATS</small></div></div>
+<div class="col-md-3"><div class="card stat-card bg-info text-center p-3"><h2>{{ recommended_count }}</h2><small>Recommended</small></div></div>
+</div>
+
+{% if ranked_candidates %}
+<div class="card border-warning shadow-card mb-4">
+<div class="card-body text-center">
+<h3>👑 Top Candidate</h3>
+<h4>{{ ranked_candidates[0].name }}</h4>
+<p>{{ ranked_candidates[0].filename }}</p>
+<h2>{{ ranked_candidates[0].ats_score }}%</h2>
+<span class="badge bg-success">{{ ranked_candidates[0].recommendation }}</span>
+</div>
+</div>
+{% endif %}
+
+<div class="row">
+{% for candidate in ranked_candidates %}
+<div class="col-lg-6 mb-4">
+<div class="card shadow-card h-100">
+<div class="card-body">
+<div class="d-flex justify-content-between">
+<h4><i class="fa-solid fa-user"></i> {{ candidate.name }}</h4>
+<span class="badge bg-dark">#{{ loop.index }}</span>
+</div>
+<p class="text-muted">{{ candidate.filename }}</p>
+
+<label>ATS Score</label>
+<div class="progress mb-3">
+<div class="progress-bar bg-success" style="width:{{ candidate.ats_score }}%">{{ candidate.ats_score }}%</div>
+</div>
+
+<div class="row">
+<div class="col-6"><strong>AI:</strong> {{ candidate.score }}%</div>
+<div class="col-6"><strong>Skills:</strong> {{ candidate.skill_match_percentage }}%</div>
+<div class="col-6 mt-2"><i class="fa fa-envelope"></i> {{ candidate.email }}</div>
+<div class="col-6 mt-2"><i class="fa fa-phone"></i> {{ candidate.phone }}</div>
+<div class="col-6 mt-2"><strong>🎓</strong> {{ candidate.education }}</div>
+<div class="col-6 mt-2"><strong>💼</strong> {{ candidate.experience }}</div>
+</div>
+
+<hr>
+
+<p><strong>Recommendation:</strong>
+<span class="badge bg-primary">{{ candidate.recommendation }}</span>
+</p>
+
+<p><strong>Matched Skills</strong><br>
+{% if candidate.matched_skills %}
+{% for s in candidate.matched_skills %}<span class="badge bg-success">{{ s }}</span>{% endfor %}
+{% else %}-{% endif %}
+</p>
+
+<p><strong>Missing Skills</strong><br>
+{% if candidate.missing_skills %}
+{% for s in candidate.missing_skills %}<span class="badge bg-danger">{{ s }}</span>{% endfor %}
+{% else %}-{% endif %}
+</p>
+
+<p><strong>Strengths</strong><br>
+{% for s in candidate.strengths %}<span class="badge bg-success">{{ s }}</span>{% endfor %}
+</p>
+
+<p><strong>Weaknesses</strong><br>
+{% if candidate.weaknesses %}
+{% for w in candidate.weaknesses %}<span class="badge bg-danger">{{ w }}</span>{% endfor %}
+{% else %}-{% endif %}
+</p>
+
+</div>
+</div>
+</div>
+{% endfor %}
+</div>
+
+<div class="text-center mb-5">
+<a href="/" class="btn btn-primary btn-lg">Analyze More Resumes</a>
+</div>
+
+</div>
+</body>
+</html>

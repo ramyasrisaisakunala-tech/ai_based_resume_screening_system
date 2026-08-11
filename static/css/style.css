@@ -1,0 +1,51 @@
+body{
+
+background:#eef3f8;
+
+font-family:'Segoe UI';
+
+}
+
+.card{
+
+border:none;
+
+border-radius:20px;
+
+box-shadow:0 10px 25px rgba(0,0,0,.08);
+
+transition:.3s;
+
+}
+
+.card:hover{
+
+transform:translateY(-6px);
+
+box-shadow:0 20px 40px rgba(0,0,0,.15);
+
+}
+
+.badge{
+
+margin:3px;
+
+padding:8px 10px;
+
+font-size:13px;
+
+}
+
+.progress{
+
+height:18px;
+
+border-radius:20px;
+
+}
+
+.navbar{
+
+background:linear-gradient(90deg,#0d6efd,#6f42c1);
+
+}
